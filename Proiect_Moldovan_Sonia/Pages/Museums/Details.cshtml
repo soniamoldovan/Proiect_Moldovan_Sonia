@@ -1,0 +1,37 @@
+﻿@page
+@model Proiect_Moldovan_Sonia.Pages.Museums.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Museum</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Museum.MuseumName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Museum.MuseumName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Museum.Location)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Museum.Location)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Museum.TicketPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Museum.TicketPrice)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Museum.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
