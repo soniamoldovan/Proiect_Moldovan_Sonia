@@ -30,13 +30,40 @@
                 <span asp-validation-for="Painting.Price" class="text-danger"></span>
             </div>
             <label asp-for="Painting.MuseumID" class="control-label">Museum</label>
-            <select asp-for="Painting.MuseumID" class="form-control" asp-items="ViewBag.PublisherID">
+            <select asp-for="Painting.MuseumID" class="form-control" asp-items="ViewBag.MuseumID">
             </select>
             <span asp-validation-for="Painting.MuseumID" class="text-danger"></span>
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="table">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                foreach (var cat in Model.AssignedEraDataList)
+                                {
+                                    if (cnt++ % 3 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedEras"
+                                               value="@cat.EraID"
+                                               @(Html.Raw(cat.Assigned ? "checked=\"checked\"" : "")) />
+                                        @cat.EraID @: @cat.Name
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
     </div>
 </div>
 

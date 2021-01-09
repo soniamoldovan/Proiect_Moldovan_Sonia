@@ -10,6 +10,8 @@ namespace Proiect_Moldovan_Sonia.Models
     public class Painting
     {
         public int ID { get; set; }
+
+        [Required, StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
         public string Artist { get; set; }
 
@@ -17,6 +19,8 @@ namespace Proiect_Moldovan_Sonia.Models
         public int Price { get; set; }
         public int MuseumID { get; set; }
         public Museum Museum { get; set; }
+
+        [Display(Name = "Name of the Era")]
         public ICollection<PaintingEra> PaintingEras { get; set; }
     }
 }

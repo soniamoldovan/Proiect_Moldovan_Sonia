@@ -20,12 +20,28 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
         }
 
         public IList<Painting> Painting { get; set; }
+        public PaintingData PaintingD { get; set; }
+        public int PaintingID { get; set; }
+        public int EraID { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? id, int? categoryID)
         {
-            Painting = await _context.Painting
-                .Include(b => b.Museum)
-                .ToListAsync();
+            PaintingD = new PaintingData();
+
+            PaintingD.Paintings = await _context.Painting
+            .Include(b => b.Museum)
+            .Include(b => b.PaintingEras)
+            .ThenInclude(b => b.Era)
+            .AsNoTracking()
+            .OrderBy(b => b.Name)
+            .ToListAsync();
+            if (id != null)
+            {
+                PaintingID = id.Value;
+                Painting painting = PaintingD.Paintings
+                .Where(i => i.ID == id.Value).Single();
+                PaintingD.Eras = painting.PaintingEras.Select(s => s.Era);
+            }
         }
     }
 }

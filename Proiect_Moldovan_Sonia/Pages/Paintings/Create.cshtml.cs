@@ -10,7 +10,7 @@ using Proiect_Moldovan_Sonia.Models;
 
 namespace Proiect_Moldovan_Sonia.Pages.Paintings
 {
-    public class CreateModel : PageModel
+    public class CreateModel : PaintingErasPageModel
     {
         private readonly Proiect_Moldovan_Sonia.Data.Proiect_Moldovan_SoniaContext _context;
 
@@ -22,6 +22,11 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
         public IActionResult OnGet()
         {
             ViewData["MuseumID"] = new SelectList(_context.Set<Museum>(), "ID", "MuseumName");
+
+            var painting = new Painting();
+            painting.PaintingEras = new List<PaintingEra>();
+            PopulateAssignedEraData(_context, painting);
+
             return Page();
         }
 
@@ -30,17 +35,33 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedEras)
         {
-            if (!ModelState.IsValid)
+            var newPainting = new Painting();
+            if (selectedEras != null)
             {
-                return Page();
+                newPainting.PaintingEras = new List<PaintingEra>();
+                foreach (var cat in selectedEras)
+                {
+                    var catToAdd = new PaintingEra
+                    {
+                        EraID = int.Parse(cat)
+                    };
+                    newPainting.PaintingEras.Add(catToAdd);
+                }
             }
-
-            _context.Painting.Add(Painting);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            if (await TryUpdateModelAsync<Painting>(
+            newPainting,
+            "Painting",
+            i => i.Name, i => i.Artist,
+            i => i.Price, i => i.Museum, i => i.MuseumID))
+            {
+                _context.Painting.Add(newPainting);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            PopulateAssignedEraData(_context, newPainting);
+            return Page();
         }
     }
 }

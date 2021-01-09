@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/{id:int?}"
 @model Proiect_Moldovan_Sonia.Pages.Paintings.IndexModel
 
 @{
@@ -25,12 +25,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.Painting[0].Museum.MuseumName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Painting[0].PaintingEras)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Painting) {
-        <tr>
+@foreach (var item in Model.PaintingD.Paintings) {
+
+    string selectedRow = "";
+    if (item.ID == Model.PaintingID)
+    {
+        selectedRow = "table-success";
+    }
+        <tr class="@selectedRow">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -43,6 +52,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Museum.MuseumName)
             </td>
+            <td>
+                @{
+                    foreach (var category in item.PaintingEras)
+                    {
+                        @category.Era.ID @: @category.Era.EraName <br />
+                    }
+                }
+            </td>
+
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |

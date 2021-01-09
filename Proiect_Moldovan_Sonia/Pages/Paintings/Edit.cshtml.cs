@@ -11,7 +11,7 @@ using Proiect_Moldovan_Sonia.Models;
 
 namespace Proiect_Moldovan_Sonia.Pages.Paintings
 {
-    public class EditModel : PageModel
+    public class EditModel : PaintingErasPageModel
     {
         private readonly Proiect_Moldovan_Sonia.Data.Proiect_Moldovan_SoniaContext _context;
 
@@ -30,49 +30,56 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
                 return NotFound();
             }
 
-            Painting = await _context.Painting.FirstOrDefaultAsync(m => m.ID == id);
+            Painting = await _context.Painting
+                .Include(b => b.Museum)
+                .Include(b => b.PaintingEras).ThenInclude(b => b.Era)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+
 
             if (Painting == null)
             {
                 return NotFound();
             }
+
+            PopulateAssignedEraData(_context, Painting);
+
             ViewData["MuseumID"] = new SelectList(_context.Set<Museum>(), "ID", "MuseumName");
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedEras)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
-
-            _context.Attach(Painting).State = EntityState.Modified;
-
-            try
+            var paintingToUpdate = await _context.Painting
+            .Include(i => i.Museum)
+            .Include(i => i.PaintingEras)
+            .ThenInclude(i => i.Era)
+            .FirstOrDefaultAsync(s => s.ID == id);
+            if (paintingToUpdate == null)
             {
+                return NotFound();
+            }
+            if (await TryUpdateModelAsync<Painting>(
+            paintingToUpdate,
+            "Book",
+            i => i.Name, i => i.Artist,
+            i => i.Price, i => i.Museum))
+            {
+                UpdatePaintingEras(_context, selectedEras, paintingToUpdate);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PaintingExists(Painting.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool PaintingExists(int id)
-        {
-            return _context.Painting.Any(e => e.ID == id);
+            
+            UpdatePaintingEras(_context, selectedEras, paintingToUpdate);
+            PopulateAssignedEraData(_context, paintingToUpdate);
+            return Page();
         }
     }
+    
 }

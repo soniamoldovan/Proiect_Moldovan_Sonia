@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace Proiect_Moldovan_Sonia.Models
 {
-    public class Rasa
+    public class AssignedEraData
     {
+        public int EraID { get; set; }
+        public string Name { get; set; }
+        public bool Assigned { get; set; }
     }
 }
