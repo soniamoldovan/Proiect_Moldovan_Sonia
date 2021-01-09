@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proiect_Moldovan_Sonia.Data;
 
 namespace Proiect_Moldovan_Sonia.Migrations
 {
     [DbContext(typeof(Proiect_Moldovan_SoniaContext))]
-    partial class Proiect_Moldovan_SoniaContextModelSnapshot : ModelSnapshot
+    [Migration("20210109133407_EraPeriod")]
+    partial class EraPeriod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

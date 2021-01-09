@@ -13,6 +13,9 @@ namespace Proiect_Moldovan_Sonia.Models
 
         [Display(Name = "Name of the Era")]
         public string EraName { get; set; }
+
+        [Display(Name = "Period of the Era")]
+        public string EraPeriod { get; set; }
         public ICollection<PaintingEra> PaintingEras { get; set; }
     }
 }

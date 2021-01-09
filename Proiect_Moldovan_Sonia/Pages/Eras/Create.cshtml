@@ -19,6 +19,11 @@
                 <span asp-validation-for="Era.EraName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Era.EraPeriod" class="control-label"></label>
+                <input asp-for="Era.EraPeriod" class="form-control" />
+                <span asp-validation-for="Era.EraPeriod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

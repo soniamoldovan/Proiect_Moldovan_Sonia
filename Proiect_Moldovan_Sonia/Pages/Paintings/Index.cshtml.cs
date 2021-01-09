@@ -43,5 +43,6 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
                 PaintingD.Eras = painting.PaintingEras.Select(s => s.Era);
             }
         }
+
     }
 }

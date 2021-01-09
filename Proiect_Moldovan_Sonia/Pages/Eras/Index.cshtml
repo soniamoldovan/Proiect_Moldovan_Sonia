@@ -16,6 +16,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Era[0].EraName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Era[0].EraPeriod)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -24,6 +27,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.EraName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EraPeriod)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
