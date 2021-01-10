@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Proiect_Moldovan_Sonia.Data;
 using Proiect_Moldovan_Sonia.Models;
+using Microsoft.AspNetCore.Mvc.Rendering; 
 
 namespace Proiect_Moldovan_Sonia.Pages.Paintings
 {
@@ -24,8 +25,13 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
         public int PaintingID { get; set; }
         public int EraID { get; set; }
 
+      
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
+
         public async Task OnGetAsync(int? id, int? categoryID)
         {
+
             PaintingD = new PaintingData();
 
             PaintingD.Paintings = await _context.Painting
@@ -42,6 +48,13 @@ namespace Proiect_Moldovan_Sonia.Pages.Paintings
                 .Where(i => i.ID == id.Value).Single();
                 PaintingD.Eras = painting.PaintingEras.Select(s => s.Era);
             }
+
+            
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                PaintingD.Paintings = PaintingD.Paintings.Where(p => p.Name.Contains(SearchString)).ToList();
+            }
+
         }
 
     }
